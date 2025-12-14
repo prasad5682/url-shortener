@@ -1,9 +1,10 @@
 # URL Shortener Service with Analytics
 
 ## Project Overview
-This project is a URL Shortener service similar to bit.ly or TinyURL. It converts long URLs into short, easy-to-share links and tracks analytics for every redirect.
+This project is a URL Shortener service similar to bit.ly or TinyURL.  
+It converts long URLs into short, easy-to-share links and tracks analytics for every redirect.
 
-The application is built using FastAPI and SQLite, focusing on clean API design, proper database modeling, and reliable backend functionality.
+The application is built using **FastAPI** and **SQLite**, focusing on clean API design, proper database modeling, and reliable backend functionality.
 
 ---
 
@@ -57,23 +58,23 @@ Copy code
 ---
 
 ## Short Code Generation
-- A random alphanumeric string of 6 characters is generated.
-- The system checks the database for existing short codes.
-- If a collision occurs, a new code is generated until a unique one is found.
+- A random alphanumeric string of 6 characters is generated
+- The database is checked for existing short codes
+- If a collision occurs, a new code is generated until it is unique
 
 ---
 
 ## API Endpoints
 
-### POST /api/shorten
+### POST `/api/shorten`
 Creates a shortened URL.
 
-Request:
+**Request**
 ```json
 {
   "original_url": "https://www.google.com"
 }
-Response:
+Response
 
 json
 Copy code
@@ -86,7 +87,7 @@ Redirects to the original URL using HTTP 302 and records click analytics.
 GET /api/stats/{short_code}
 Returns analytics data for the given short code.
 
-Response:
+Response
 
 json
 Copy code
@@ -101,36 +102,31 @@ Handles invalid input gracefully
 
 How to Run Locally
 Clone the repository
-
 bash
 Copy code
 git clone https://github.com/prasad5682/url-shortener.git
 cd url-shortener
 Create and activate virtual environment
-
 bash
 Copy code
 py -m venv venv
 venv\Scripts\activate
 Install dependencies
-
 bash
 Copy code
 pip install fastapi uvicorn sqlalchemy pydantic
 Run the application
-
 bash
 Copy code
 uvicorn main:app --reload
 Open Swagger UI
-
-arduino
+text
 Copy code
 http://127.0.0.1:8000/docs
 API Testing
-Swagger UI is available at /docs
+Swagger UI available at /docs
 
-OpenAPI specification available at /openapi.json
+OpenAPI specification at /openapi.json
 
 Learning Outcomes
 REST API development using FastAPI
@@ -141,5 +137,4 @@ Handling unique constraints and collisions
 
 Implementing analytics tracking
 
-Proper use of HTTP status codes
-
+Proper use of HTTP status codes 
