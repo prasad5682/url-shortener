@@ -1,7 +1,12 @@
-import random
 import string
 
-def generate_short_code(length=6):
-    characters = string.ascii_letters + string.digits
-    return ''.join(random.choice(characters) for _ in range(length))
+BASE62 = string.digits + string.ascii_letters
 
+def encode_base62(num):
+    if num == 0:
+        return BASE62[0]
+    result = []
+    while num > 0:
+        num, rem = divmod(num, 62)
+        result.append(BASE62[rem])
+    return ''.join(reversed(result))

@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from database import SessionLocal, engine
 from models import Base, UrlMapping, Click
 from schemas import UrlCreate, UrlResponse, StatsResponse
-from utils import generate_short_code
+from utils import encode_base62
 
 Base.metadata.create_all(bind=engine)
 
@@ -22,18 +22,19 @@ def get_db():
 
 @app.post("/api/shorten", response_model=UrlResponse)
 def shorten_url(data: UrlCreate, db: Session = Depends(get_db)):
-    short_code = generate_short_code()
 
-    while db.query(UrlMapping).filter_by(short_code=short_code).first():
-        short_code = generate_short_code()
-
-    url = UrlMapping(
-        original_url=data.original_url,
-        short_code=short_code
-    )
+    # Step 1: Insert URL first
+    url = UrlMapping(original_url=data.original_url)
     db.add(url)
     db.commit()
     db.refresh(url)
+
+    # Step 2: Generate short code from ID
+    short_code = encode_base62(url.id)
+
+    # Step 3: Update the record with short code
+    url.short_code = short_code
+    db.commit()
 
     return {"short_code": short_code}
 
@@ -45,6 +46,7 @@ def redirect_url(short_code: str, request: Request, db: Session = Depends(get_db
     if not url:
         raise HTTPException(status_code=404, detail="URL not found")
 
+    # Record click
     click = Click(
         url_id=url.id,
         ip_address=request.client.host,
