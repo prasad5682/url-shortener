@@ -24,7 +24,7 @@ def get_db():
 def shorten_url(data: UrlCreate, db: Session = Depends(get_db)):
 
     # Step 1: Insert URL first
-    url = UrlMapping(original_url=data.original_url)
+    url = UrlMapping(original_url=str(data.original_url))
     db.add(url)
     db.commit()
     db.refresh(url)
